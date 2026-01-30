@@ -1,6 +1,15 @@
 let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", "ff8e0568cb88f231ddc9cf58a935ee24");
 const leaguesListEl = document.querySelector('.leagues__list')
+const form = document.querySelector(".input__form");
+let leagueDisplay;
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const value = e.target.query.value;
+  localStorage.setItem("searchValue", value);
+});
+
 
 let requestOptions = {
   method: 'GET',
@@ -15,28 +24,38 @@ async function getLeagues() {
   return leaguesData;
 }
 
-async function filterLeagues(filter) {
+async function renderLeagues(){
   leaguesListEl.innerHTML = `<i class="fas fa-spinner leagues__loading--spinner"></i>`
   leaguesListEl.classList += ' leagues__loading'
   const leagues = await getLeagues();
   leaguesListEl.classList.remove('leagues__loading')
 
-  
-  console.log(filter);
+  const search = localStorage.getItem("searchValue");
+
+  leagueDisplay = leagues.response.filter(league =>
+    league.league.name.toLowerCase().includes(search)
+  );
+
+  leaguesListEl.innerHTML = leagueDisplay.map(
+    (league) => postHTML(league)).join('')
+}
+
+function filterLeagues(filter) {
   if(filter.target.value === 'A_TO_Z'){
-    leagues.response.sort((a,b) => a.league.name.localeCompare(b.league.name))
+    leagueDisplay.sort((a,b) => a.league.name.localeCompare(b.league.name))
   } else if (filter.target.value === 'Z_TO_A') {
-    leagues.response.sort((a,b) => b.league.name.localeCompare(a.league.name))
+    leagueDisplay.sort((a,b) => b.league.name.localeCompare(a.league.name))
   }
-  leaguesListEl.innerHTML = leagues.response.map(
+  let leagueDisplay100 = leagueDisplay.slice(0, 100)
+  leaguesListEl.innerHTML = leagueDisplay100.map(
     (league) => postHTML(league)).join('')
 }
 
 function postHTML(league) {
-    return `<div class="league__box">
-                <img src="${league.league.logo}" alt="" class="league__logo">
-                <div class="league__name">${league.league.name}</div>
-            </div>`
+  return `<div class="league__box">
+              <img src="${league.league.logo}" alt="" class="league__logo">
+              <div class="league__name">${league.league.name}</div>
+          </div>`
 }
 
 async function main(){
@@ -44,7 +63,9 @@ async function main(){
   leaguesListEl.classList += ' leagues__loading'
   const leagues = await getLeagues();
   leaguesListEl.classList.remove('leagues__loading')
-  leaguesListEl.innerHTML = leagues.response.map(
+  leagueDisplay = leagues.response
+  let leagueDisplay100 = leagueDisplay.slice(0, 100);
+  leaguesListEl.innerHTML = leagueDisplay100.map(
     (league) => postHTML(league)).join('')
 }
 

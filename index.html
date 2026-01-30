@@ -32,10 +32,10 @@
                 <h2 class="section__subtitle">
                     The place to find all your leagues
                 </h2>
-                <div class="input__container">
-                    <input type="text" class="input" placeholder="search for your league">
-                    <button class="input__btn" onclick="filterLeagues()">Search</button>
-                </div>
+                <form class="input__form">
+                    <input type="text" class="input" placeholder="search for your league" name="query">
+                    <button class="input__btn" onclick="renderLeagues()">Search</button>
+                </form>
             </div>
         </div>
     </section>
@@ -70,7 +70,7 @@
             ">
               Home
             </a>
-            <a href="#about" 
+            <a href="#leagues" 
             class="footer__social--link
               link__hover-effect
               link__hover-effect--white
