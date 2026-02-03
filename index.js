@@ -26,8 +26,12 @@ async function getLeagues() {
 }
 
 async function renderLeagues(search){
+  if(!leagues){
+    return;
+  }
+  
   leagueDisplay = leagues.response.filter(league =>
-    league.league.name.toLowerCase().includes(search)
+    league.league.name.toLowerCase().includes(search.toLowerCase())
   );
   
   leaguesListEl.innerHTML = leagueDisplay.map(
