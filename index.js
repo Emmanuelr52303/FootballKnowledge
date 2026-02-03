@@ -2,6 +2,7 @@ let myHeaders = new Headers();
 myHeaders.append("x-apisports-key", "ff8e0568cb88f231ddc9cf58a935ee24");
 const leaguesListEl = document.querySelector('.leagues__list')
 const form = document.querySelector(".input__form");
+let leagues;
 let leagueDisplay;
 
 form.addEventListener("submit", (e) => {
@@ -27,15 +28,15 @@ async function getLeagues() {
 async function renderLeagues(){
   leaguesListEl.innerHTML = `<i class="fas fa-spinner leagues__loading--spinner"></i>`
   leaguesListEl.classList += ' leagues__loading'
-  const leagues = await getLeagues();
-  leaguesListEl.classList.remove('leagues__loading')
-
+  
   const search = localStorage.getItem("searchValue");
 
   leagueDisplay = leagues.response.filter(league =>
     league.league.name.toLowerCase().includes(search)
   );
 
+  leaguesListEl.classList.remove('leagues__loading')
+  
   leaguesListEl.innerHTML = leagueDisplay.map(
     (league) => postHTML(league)).join('')
 }
@@ -61,7 +62,7 @@ function postHTML(league) {
 async function main(){
   leaguesListEl.innerHTML = `<i class="fas fa-spinner leagues__loading--spinner"></i>`
   leaguesListEl.classList += ' leagues__loading'
-  const leagues = await getLeagues();
+  leagues = await getLeagues();
   leaguesListEl.classList.remove('leagues__loading')
   leagueDisplay = leagues.response
   let leagueDisplay100 = leagueDisplay.slice(0, 100);
