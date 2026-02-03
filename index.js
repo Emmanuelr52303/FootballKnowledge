@@ -26,16 +26,11 @@ async function getLeagues() {
 }
 
 async function renderLeagues(){
-  leaguesListEl.innerHTML = `<i class="fas fa-spinner leagues__loading--spinner"></i>`
-  leaguesListEl.classList += ' leagues__loading'
-  
   const search = localStorage.getItem("searchValue");
 
   leagueDisplay = leagues.response.filter(league =>
     league.league.name.toLowerCase().includes(search)
   );
-
-  leaguesListEl.classList.remove('leagues__loading')
   
   leaguesListEl.innerHTML = leagueDisplay.map(
     (league) => postHTML(league)).join('')
