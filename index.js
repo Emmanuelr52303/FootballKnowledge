@@ -8,7 +8,7 @@ let leagueDisplay;
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const value = e.target.query.value;
-  localStorage.setItem("searchValue", value);
+  renderLeagues(value);
 });
 
 
@@ -25,9 +25,7 @@ async function getLeagues() {
   return leaguesData;
 }
 
-async function renderLeagues(){
-  const search = localStorage.getItem("searchValue");
-
+async function renderLeagues(search){
   leagueDisplay = leagues.response.filter(league =>
     league.league.name.toLowerCase().includes(search)
   );
